@@ -17,6 +17,8 @@ use std::sync::atomic::{AtomicU8, Ordering};
 async fn main() {
     const NUM_ITERATIONS: usize = 10;
 
+    let durations_http_local = collect_duration_http(NUM_ITERATIONS, spawn_http_local).await;
+    print_statistics("http local fork", &durations_http_local);
 
     let durations_ipc = collect_duration_ipc(NUM_ITERATIONS, spawn_ipc).await;
     print_statistics("Ipc fork", &durations_ipc);
@@ -24,6 +26,8 @@ async fn main() {
     let durations_ethers_reth = collect_duration_ipc(NUM_ITERATIONS, spawn_ethers_reth).await;
     print_statistics("Ipc ethers_reth fork", &durations_ethers_reth);
 
+    let durations_http = collect_duration_http(NUM_ITERATIONS, spawn_http_external).await;
+    print_statistics("http fork", &durations_http);
 }
 
 pub async fn collect_duration_http<F, Fut>(num_iterations: usize, spawn_function: F) -> Vec<f64>
